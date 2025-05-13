@@ -11,7 +11,7 @@ Just use the provided script
 ```
 
 ## Config
-There is a very rudimentary config system in `defaults.h`. You can change the scenes here.
+There is a very rudimentary config system in `features.h`. You can change the scenes here.
 
 ## Keybinds
 
