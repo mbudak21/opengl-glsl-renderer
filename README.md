@@ -1,11 +1,14 @@
 # opengl-glsl-renderer
 A c++ project with various shader implementations in glsl and a graphical pipeline implementation in OpenGL.
 
-# Requirements
+## Requirements
 You need to have glew, freeglut, and g++
 
-# Running
+## Running
 Just use the provided script
 ```
 ./run.sh
 ```
+
+## TODOs
+The project structure is quite messy, it should be fixed sometime.
