@@ -1,5 +1,6 @@
 # opengl-glsl-renderer
 A c++ project with various shader implementations in glsl and a graphical pipeline implementation in OpenGL.
+![Preview](preview.gif)
 
 # Requirements
 You need to have glew, freeglut, and g++

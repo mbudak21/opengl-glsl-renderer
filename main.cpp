@@ -275,13 +275,16 @@ void cleanUp(void) {
 #include "./models/mesh_triceratops.h"
 
 Mesh* anim1;
-float delta = 2.f; // Rotate 2 degrees per frame
-void animateMeshRotationY(int delay_ms) {
+Mesh* anim2;
+void animateMeshes(int delay_ms) {
     if (anim1) {
-        anim1->rot.y += delta;
+        anim1->rot.y += 2.f;
+    }
+    if (anim2) {
+        anim2->rot.y -= 2.f;
     }
     glutPostRedisplay(); // Trigger redraw
-    glutTimerFunc(delay_ms, animateMeshRotationY, delay_ms); // Repeat timer
+    glutTimerFunc(delay_ms, animateMeshes, delay_ms); // Repeat timer
 }
 
 void loadScene(int scene){
@@ -389,15 +392,24 @@ void loadScene(int scene){
 		glm::vec3 knotScale = {0.4f, 0.4f, 0.4f};
 		glm::vec3 knotPos = {0.f, 4.f, 0.f};
 		glm::vec3 knotRot = {0.f, 0.f, 0.f};
+
+		glm::vec3 bunnyScale = {60.f, 60.f, 60.f};
+		glm::vec3 bunnyPos = {0.f, 8.f, +1.f};
+		glm::vec3 bunnyRot = {0.f, 0.f, 0.f};
 	
 		Mesh* rawCubeMesh = insertModel(&meshList, cube.nov, cube.verts, cube.nof, cube.faces, cubeScale, cubePos, cubeRot, Material::Brass());
 		Mesh* rawKnotMesh = insertModel(&meshList, knot.nov, knot.verts, knot.nof, knot.faces, knotScale, knotPos, knotRot, Material::RedRealistic());
-		
+		Mesh* rawBunnyMesh = insertModel(&meshList, bunny.nov, bunny.verts, bunny.nof, bunny.faces, bunnyScale, bunnyPos, bunnyRot, Material::Obsidian());
+
 		anim1 = rawKnotMesh;
-		glutTimerFunc(20, animateMeshRotationY, 20); // 20ms = 50 FPS
+		anim2 = rawBunnyMesh;
+		glutTimerFunc(20, animateMeshes, 20); // 20ms = 50 FPS
 
 		glm::vec3 lightPos1 = glm::vec3(-20.0, 10.0, 10.0);
-		Light l1 = Light(lightPos1, glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.9, 0.9, 0.7), glm::vec3(1.0, 1.0, 1.0));
+		Light l1 = Light(lightPos1, glm::vec3(0.2, 0.1, 0.1), glm::vec3(0.9, 0.45, 0.35), glm::vec3(1.0, 1.0/2, 1.0/2));
+
+		glm::vec3 lightPos2 = glm::vec3(+20.0, 10.0, 10.0);
+		Light l2 = Light(lightPos2, glm::vec3(0.1, 0.1, 0.2), glm::vec3(0.45, 0.45, 0.7), glm::vec3(1.0/2, 1.0/2, 1.0));
 	}
 }
 
@@ -410,7 +422,7 @@ int main(int argc, char **argv) {
 	glutInitDisplayMode(_glut_mode);
 	glutInit(&argc, argv);
 	glutInitWindowSize(screen_width, screen_height);
-	windowHandle = glutCreateWindow("DVA338 Programming Assignments");
+	windowHandle = glutCreateWindow("OpenGL");
 	glutDisplayFunc(display);
 	glutReshapeFunc(changeSize);
 	glutKeyboardFunc(keypress);
