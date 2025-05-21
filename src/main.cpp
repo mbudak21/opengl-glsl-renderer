@@ -15,7 +15,7 @@
 #include "camera.h"
 #include "shaders.h"
 #include "mesh.h"
-#include "features.h"
+#include "constants.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "inputManager.h"
 #include "lights.h"
@@ -265,14 +265,14 @@ void cleanUp(void) {
 
 
 // Include data for some triangle meshes (hard coded in struct variables)
-#include "./models/mesh_bunny.h"
-#include "./models/mesh_cow.h"
-#include "./models/mesh_cube.h"
-#include "./models/mesh_frog.h"
-#include "./models/mesh_knot.h"
-#include "./models/mesh_sphere.h"
-#include "./models/mesh_teapot.h"
-#include "./models/mesh_triceratops.h"
+#include "mesh_bunny.h"
+#include "mesh_cow.h"
+#include "mesh_cube.h"
+#include "mesh_frog.h"
+#include "mesh_knot.h"
+#include "mesh_sphere.h"
+#include "mesh_teapot.h"
+#include "mesh_triceratops.h"
 
 Mesh* anim1;
 Mesh* anim2;
