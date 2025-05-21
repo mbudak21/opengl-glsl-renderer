@@ -5,9 +5,11 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCES
     main.cpp
-	algebra.cpp
     camera.cpp
     mesh.cpp
+    lights.cpp
+    material.cpp
+    shaders.cpp
 )
 
 # Find required packages
