@@ -20,7 +20,7 @@
 #include "inputManager.h"
 #include "lights.h"
 #include "animations.h"
-
+#include <chrono>
 
 // Initializations
 Camera cam;
@@ -34,6 +34,7 @@ int key_delay = KEY_DELAY;
 int screen_width = 1024;
 int screen_height = 768;
 
+auto g_lastTime = std::chrono::high_resolution_clock::now();
 int numLights = 0;
 glm::vec3 lightWorldPos[MAX_LIGHTS];
 ProjectionMode currentProjMode = PROJ_MODE;
@@ -166,6 +167,9 @@ void keyrelease(unsigned char key, int x, int y) {
 }
 
 void update() {
+    auto now = std::chrono::high_resolution_clock::now();
+    float dt = std::chrono::duration<float>(now - g_lastTime).count();
+    g_lastTime = now;
 	
 	if (key_delay > 0) {
 		key_delay -= 1;
@@ -211,10 +215,6 @@ void update() {
 		shprg = getCurrentShader();
 		key_delay = KEY_DELAY;
 	}
-
-	if (inputManager.isPressed('o')){
-		
-	}
 	
 	// Exit
 	if (inputManager.isPressed('q') && inputManager.shiftPressed()) {
@@ -226,6 +226,7 @@ void update() {
 			glutLeaveMainLoop();
 		#endif
 	}
+	Anim::update(dt);
     glutPostRedisplay();
 }
 
@@ -274,18 +275,18 @@ void cleanUp(void) {
 #include "mesh_teapot.h"
 #include "mesh_triceratops.h"
 
-Mesh* anim1;
-Mesh* anim2;
-void animateMeshes(int delay_ms) {
-    if (anim1) {
-        anim1->rot.y += 2.f;
-    }
-    if (anim2) {
-        anim2->rot.y -= 2.f;
-    }
-    glutPostRedisplay(); // Trigger redraw
-    glutTimerFunc(delay_ms, animateMeshes, delay_ms); // Repeat timer
-}
+// Mesh* anim1;
+// Mesh* anim2;
+// void animateMeshes(int delay_ms) {
+//     if (anim1) {
+//         anim1->rot.y += 2.f;
+//     }
+//     if (anim2) {
+//         anim2->rot.y -= 2.f;
+//     }
+//     glutPostRedisplay(); // Trigger redraw
+//     glutTimerFunc(delay_ms, animateMeshes, delay_ms); // Repeat timer
+// }
 
 void loadScene(int scene){
 	
@@ -401,9 +402,15 @@ void loadScene(int scene){
 		Mesh* rawKnotMesh = insertModel(&meshList, knot.nov, knot.verts, knot.nof, knot.faces, knotScale, knotPos, knotRot, Material::RedRealistic());
 		Mesh* rawBunnyMesh = insertModel(&meshList, bunny.nov, bunny.verts, bunny.nof, bunny.faces, bunnyScale, bunnyPos, bunnyRot, Material::Obsidian());
 
-		anim1 = rawKnotMesh;
-		anim2 = rawBunnyMesh;
-		glutTimerFunc(20, animateMeshes, 20); // 20ms = 50 FPS
+		// anim1 = rawKnotMesh;
+		// anim2 = rawBunnyMesh;
+		// glutTimerFunc(20, animateMeshes, 20); // 20ms = 50 FPS
+		Anim::addRotate(rawKnotMesh, 50.0f);
+		Anim::addRotate(rawBunnyMesh, -50.0f);
+		Anim::addScale(rawBunnyMesh, glm::vec3(-5.0f, -5.0f, -5.0f));
+		Anim::addScale(rawCubeMesh, glm::vec3(1.0f, 0.0f, 1.0f));
+
+
 
 		glm::vec3 lightPos1 = glm::vec3(-20.0, 10.0, 10.0);
 		Light l1 = Light(lightPos1, glm::vec3(0.2, 0.1, 0.1), glm::vec3(0.9, 0.45, 0.35), glm::vec3(1.0, 1.0/2, 1.0/2));
