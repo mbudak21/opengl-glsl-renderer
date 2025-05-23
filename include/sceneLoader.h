@@ -2,8 +2,6 @@
 #define _SCENELOADER_H_
 
 
-#include "mesh.h"
-
 #include <cassert>
 #include "camera.h"
 #include "lights.h"

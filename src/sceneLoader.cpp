@@ -1,13 +1,13 @@
 #include "sceneLoader.h"
 
-#include "mesh_bunny.h"
-#include "mesh_cow.h"
-#include "mesh_cube.h"
-#include "mesh_frog.h"
-#include "mesh_knot.h"
-#include "mesh_sphere.h"
-#include "mesh_teapot.h"
-#include "mesh_triceratops.h"
+// #include "mesh_bunny.h"
+// #include "mesh_cow.h"
+// #include "mesh_cube.h"
+// #include "mesh_frog.h"
+// #include "mesh_knot.h"
+// #include "mesh_sphere.h"
+// #include "mesh_teapot.h"
+// #include "mesh_triceratops.h"
 
 obj* loadObject(const char* path){
 	obj* o; 

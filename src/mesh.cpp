@@ -3,6 +3,7 @@
 #include "features.h"
 #include "material.h"
 #include <stdio.h>
+#include <shaders.h>
 
 Mesh* insertModel(Mesh** list, int nv, float* vArr, int nt, int* tArr, float scale, Material mat) {
 	glm::vec3 Scale = {scale, scale, scale};
@@ -70,3 +71,63 @@ Mesh* insertModel(Mesh** list, int nv, float* vArr, int nt, int* tArr, glm::vec3
 	*list = mesh;
 	return mesh; // Return the current mesh
 }
+
+
+void prepareMesh(Mesh *mesh) {
+	int sizeVerts = mesh->nv * 3 * sizeof(float);
+	int sizeCols  = mesh->nv * 3 * sizeof(float);
+	int sizeTris = mesh->nt * 3 * sizeof(int);
+	
+	// For storage of state and other buffer objects needed for vertex specification
+	glGenVertexArrays(1, &mesh->vao);
+	glBindVertexArray(mesh->vao);
+
+	// Allocate VBO and load mesh data (vertices and normals)
+	glGenBuffers(1, &mesh->vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeVerts + sizeCols, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeVerts, (void *)mesh->vertices);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeVerts, sizeCols, (void *)mesh->vnorms);
+
+	// Allocate index buffer and load mesh indices
+	glGenBuffers(1, &mesh->ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeTris, (void *)mesh->triangles, GL_STATIC_DRAW);
+
+	// Bind vPos to location 0
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// Bind vNorm to location 1 (after vertex data)
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *)(mesh->nv * 3 * sizeof(float)));
+	glBindVertexArray(0);
+}
+
+// void renderMesh(Mesh *mesh) {
+// 	// Matrix M = Translate(pos) * Rotate(rot) * Scale(scale);
+// 	glm::mat4 T = glm::translate(glm::mat4(1.0f), mesh->pos);
+// 	glm::mat4 Rx = glm::rotate(glm::mat4(1.0f), glm::radians(mesh->rot.x), glm::vec3(1, 0, 0));
+// 	glm::mat4 Ry = glm::rotate(glm::mat4(1.0f), glm::radians(mesh->rot.y), glm::vec3(0, 1, 0));
+// 	glm::mat4 Rz = glm::rotate(glm::mat4(1.0f), glm::radians(mesh->rot.z), glm::vec3(0, 0, 1));
+// 	glm::mat4 S = glm::scale(glm::mat4(1.0f), mesh->scale);
+	
+// 	glm::mat4 R = Rz * Ry * Rx;
+// 	glm::mat4 M = T * R * S;
+
+// 	setMatrix4fv(shprg, "M", M);
+// 	setMatrix4fv(shprg, "PVM", P*V*M);
+// 	setVector3fv(shprg, "matAmb", mesh->mat.getAmb());
+// 	setVector3fv(shprg, "matDiff", mesh->mat.getDiff());
+// 	setVector3fv(shprg, "matSpec", mesh->mat.getSpec());
+// 	setFloat1f(shprg, "matShininess", mesh->mat.getShininess());
+
+// 	// Select current resources
+// 	glBindVertexArray(mesh->vao);
+	
+// 	glPolygonMode(GL_FRONT_AND_BACK, currentPolygonMode); 
+
+// 	// Draw all triangles
+// 	glDrawElements(GL_TRIANGLES, mesh->nt * 3, GL_UNSIGNED_INT, NULL); 
+// 	glBindVertexArray(0);
+// }
