@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(Proj2)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -DNDEBUG") # Optimize for release
 
@@ -17,6 +17,9 @@ set(SOURCES
     src/lights.cpp
     src/material.cpp
     src/shaders.cpp
+    src/sceneLoader.cpp
+    src/obj.c
+    
 )
 
 
