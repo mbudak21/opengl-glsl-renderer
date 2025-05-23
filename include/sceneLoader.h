@@ -11,6 +11,6 @@
 #include "obj.h"
 #include <stdio.h>
 
-void loadScene(int scene, Camera* cam, _Mesh** meshList, std::vector<obj*>* objList, GLuint shprg);
+void loadScene(int scene, Camera* cam, std::vector<obj*>* objList, GLuint shprg);
 
 #endif

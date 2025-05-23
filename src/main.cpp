@@ -27,7 +27,6 @@
 // Initializations
 Camera cam;
 InputManager inputManager; // Handles keyboard input
-Mesh *meshList = NULL; // Global pointer to linked list of triangle meshes
 static std::vector<obj*> objList; // Global pointer to list of Obj's
 GLuint shprg; // Shader program id
 int windowHandle;
@@ -294,14 +293,6 @@ void display(void) {
 
 	Light::sendLightsToShader(shprg);
 
-	// Render all meshes
-	Mesh* mesh;
-	mesh = meshList;
-		
-	while (mesh != NULL) {
-		renderMesh(mesh);
-		mesh = mesh->next;
-	}
 	for(auto o:objList){
 		renderObject(o);
 	}
@@ -319,12 +310,6 @@ void init(void) {
 
 	glEnable(GL_DEPTH_TEST);
 	
-	// Setup OpenGL buffers for rendering
-	Mesh * mesh = meshList;
-	while (mesh != NULL) {
-		prepareMesh(mesh);
-		mesh = mesh->next;
-	}
 	for(auto o:objList){
 		prepareObject(o);
 	}
@@ -378,17 +363,9 @@ int main(int argc, char **argv) {
 	fprintf(stdout, "OpenGL vendor: %s\n\n", glGetString(GL_VENDOR));
 
 	
-	loadScene(SCENE, &cam, &meshList, &objList, shprg);
+	loadScene(SCENE, &cam, &objList, shprg);
 
 	init();
-
-	// Mesh Count
-	int meshCount;
-	Mesh* start = meshList;
-	for (meshCount = 0; start != NULL; meshCount++){
-		start = start->next;
-	};
-	printf("Meshes being rendered: %i\n", meshCount);
 
 	// Object Count
 	printf("Objects being rendered: %i\n", objList.size());
