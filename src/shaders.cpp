@@ -79,7 +79,7 @@ GLuint compileShaderProgram(const std::string& vs_str, const std::string& fs_str
 	GLuint gs;
 	bool hasGeometry = !geometrySrc.empty();
 	if (hasGeometry) {
-		printf("Loading geometry shader");
+		printf("Loading geometry shader\n");
 		gs = glCreateShader(GL_GEOMETRY_SHADER);
 		const char* gs_ptr = geometrySrc.c_str();
 		glShaderSource(gs, 1, &gs_ptr, NULL);
@@ -115,7 +115,7 @@ GLuint compileShaderProgram(const std::string& vs_str, const std::string& fs_str
 	glDeleteShader(fs);
 
 	if (shaderProgram != 0) {
-		printf("Shader program linked successfully!\n");
+		//printf("Shader program linked successfully!\n");
 	}
 
 	return shaderProgram;
@@ -144,7 +144,14 @@ void initShaders() {
 	temp.fragmentSource = loadShaderFromFile("./shaders/temp_frag.glsl");
 	temp.programID = compileShaderProgram(temp.vertexSource, temp.fragmentSource);
 	temp.name = "temp";
-	shaders.push_back(temp);	
+	shaders.push_back(temp);
+
+	ShaderProgram test;
+	test.vertexSource = loadShaderFromFile("./shaders/test_vertex.glsl");
+	test.fragmentSource = loadShaderFromFile("./shaders/test_frag.glsl");
+	test.programID = compileShaderProgram(test.vertexSource, test.fragmentSource);
+	test.name = "test";
+	shaders.push_back(test);	
 
 
 	ShaderProgram flat;
