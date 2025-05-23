@@ -7,23 +7,23 @@
 #include "mesh.h"
 
 namespace Anim {
-
     struct Rot {
-        Mesh*      target;
-        float      speedDegSec;
+        Mesh*   target;
+        float   speedDegSec;
     };
     struct Trans {
-        Mesh*      target;
-        glm::vec3  speedPerSec;
+        Mesh*   target;
+        glm::vec3   speedPerSec;
     };
     struct Scale {
-        Mesh*      target;
-        glm::vec3  speedPerSec;
+        Mesh*   target;
+        glm::vec3   speedPerSec;
     };
 
-    static std::vector<Rot>      rotations;
-    static std::vector<Trans>    translations;
-    static std::vector<Scale>    scalings;
+    // C++17 inline variables: one shared instance
+    inline std::vector<Rot>      rotations;
+    inline std::vector<Trans>    translations;
+    inline std::vector<Scale>    scalings;
 
     inline void addRotate(Mesh* m, float speedDegPerSec) {
         rotations.push_back({m, speedDegPerSec});
@@ -52,6 +52,6 @@ namespace Anim {
         }
     }
 
-} // namespace Anim
+}
 
-#endif  // _ANIMATIONS_H_
+#endif

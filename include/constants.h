@@ -22,8 +22,11 @@ enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
 #define SCENE_LIGHTS 250
 #define SCENE_ANIMATIONS 321
 
+// Obj.c implementation
+#define SCENE_CADILLAC 901
 
-#define SCENE SCENE_ANIMATIONS
+
+#define SCENE SCENE_CADILLAC
 
 
 #if SCENE == SCENE_DEFAULT_CAMERA
@@ -55,6 +58,10 @@ enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
     #define POLYGON_MODE GL_FILL
 #endif
 #if SCENE == SCENE_ANIMATIONS
+    #define PROJ_MODE PERSPECTIVE
+    #define POLYGON_MODE GL_FILL
+#endif
+#if SCENE == SCENE_CADILLAC
     #define PROJ_MODE PERSPECTIVE
     #define POLYGON_MODE GL_FILL
 #endif
