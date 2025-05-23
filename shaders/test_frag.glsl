@@ -40,24 +40,24 @@ void main() {
     vec3 baseColor = useDiffuseMap
         ? texture(diffuseMap, fragTexCoord).rgb
         : vec3(1.f, 1.f, 0.f);
-    // fColor = vec4(baseColor, 1.0f);
+    fColor = vec4(baseColor, 1.0f);
 
-    vec3 ambient  = vec3(0.0);
-    vec3 diffuse  = vec3(0.0);
-    vec3 specular = vec3(0.0);
+    // vec3 ambient  = vec3(0.0);
+    // vec3 diffuse  = vec3(0.0);
+    // vec3 specular = vec3(0.0);
 
-    for (int i = 0; i < numLights; ++i) {
-        vec3 L = normalize(lights[i].position - fragPos);
-        vec3 R = normalize(reflect(-L, N));
+    // for (int i = 0; i < numLights; ++i) {
+    //     vec3 L = normalize(lights[i].position - fragPos);
+    //     vec3 R = normalize(reflect(-L, N));
 
-        ambient += lights[i].ambient;
+    //     ambient += lights[i].ambient;
 
-        float dif = max(dot(N, L), 0.0);
-        diffuse += dif * lights[i].diffuse * baseColor;
+    //     float dif = max(dot(N, L), 0.0);
+    //     diffuse += dif * lights[i].diffuse * baseColor;
 
-        float spec = pow(max(dot(R, ViewDir), 0.0), 64);
-        specular += spec * lights[i].specular;
-    }
+    //     float spec = pow(max(dot(R, ViewDir), 0.0), 64);
+    //     specular += spec * lights[i].specular;
+    // }
 
-    fColor = vec4(ambient + diffuse + specular, 1.0);
+    // fColor = vec4(ambient + diffuse + specular, 1.0);
 }

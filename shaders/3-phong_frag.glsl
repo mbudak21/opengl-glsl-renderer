@@ -7,9 +7,12 @@ uniform mat4 V;
 uniform mat4 P;
 uniform vec3 camPos;
 uniform mat4 M;
-uniform vec3 matAmb;
-uniform vec3 matDiff;
-uniform vec3 matSpec;
+// uniform vec3 matAmb;
+// uniform vec3 matDiff;
+// uniform vec3 matSpec;
+vec3 matAmb = vec3(0.1);
+vec3 matDiff = vec3(0.2);
+vec3 matSpec = vec3(0.3);
 uniform float matShininess;
 
 struct Light {
