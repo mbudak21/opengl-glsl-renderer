@@ -1,4 +1,6 @@
-.vscode/
+.vscode/**
+.vscode
+/objects/**
 # Ignore build directory
 build/
 
