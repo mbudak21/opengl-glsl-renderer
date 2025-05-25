@@ -11,15 +11,17 @@ find_package(glm REQUIRED)
 include_directories(${GLM_INCLUDE_DIRS})
 
 set(SOURCES
+    # src/algebra.cpp
     src/main.cpp
     src/camera.cpp
-    src/mesh.cpp
     src/lights.cpp
     src/material.cpp
-    src/shaders.cpp
-    src/sceneLoader.cpp
+    # src/mesh.cpp
     src/obj.c
-    
+    src/sceneLoader.cpp
+    src/sceneObj.cpp
+    src/shaders.cpp
+    src/locCache.cpp
 )
 
 

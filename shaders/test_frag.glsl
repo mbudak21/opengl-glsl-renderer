@@ -1,16 +1,16 @@
 #version 410 core
 
 in vec3 fragPos;
-in vec3 fragNormal;
+// in vec3 fragNormal;
 in vec2 fragTexCoord;
 
-uniform mat4 P;
-uniform mat4 V;
+// uniform mat4 P;
+// uniform mat4 V;
 uniform vec3 camPos;
-uniform mat4 M;
-uniform vec3 matAmb;
-uniform vec3 matDiff;
-uniform vec3 matSpec;
+// uniform mat4 M;
+// uniform vec3 matAmb;
+// uniform vec3 matDiff;
+// uniform vec3 matSpec;
 // vec3 matAmb = vec3(0.1);
 // vec3 matDiff = vec3(0.2);
 // vec3 matSpec = vec3(0.3);
@@ -33,7 +33,7 @@ uniform int numLights;
 out vec4 fColor;
 
 void main() {
-    vec3 N = normalize(fragNormal);
+    // vec3 N = normalize(fragNormal);
     vec3 ViewDir = normalize(camPos - fragPos);
 
     // sample your diffuse texture (or use matDiff if you don't)

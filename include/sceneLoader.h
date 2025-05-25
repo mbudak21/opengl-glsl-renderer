@@ -6,9 +6,9 @@
 #include "camera.h"
 #include "lights.h"
 #include "animations.h"
-#include "obj.h"
 #include <stdio.h>
+#include "sceneObj.h"
 
-void loadScene(int scene, Camera* cam, std::vector<obj*>* objList, GLuint shprg);
+void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuint shprg);
 
 #endif

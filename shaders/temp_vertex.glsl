@@ -8,7 +8,7 @@ layout(location = 3) in vec3 vTangent;
 uniform mat4 P;
 uniform mat4 V;
 uniform mat4 M;
-uniform mat4 PV;
+// uniform mat4 PV;
 uniform mat4 PVM;
 
 out vec3 fragPos;
@@ -25,5 +25,5 @@ void main() {
     fragTexCoord = vTexCoord;
 
     // final clip‐space
-    gl_Position = PVM * vec4(vPos, 1.0);
+    gl_Position = P*V*M * vec4(vPos, 1.0);
 }

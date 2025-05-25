@@ -4,7 +4,7 @@
 
 #define MOVEMENT_SPEED 0.01f
 #define ROTATION_SPEED 0.05f
-#define KEY_DELAY 400 // TODO: Use a time based delay, not an update based delay
+#define KEY_DELAY 0.2f
 #define MAX_LIGHTS 4
 
 enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
@@ -24,9 +24,10 @@ enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
 
 // Obj.c implementation
 #define SCENE_CADILLAC 901
+#define SCENE_CADILLAC_BENCHMARK 902
 
 
-#define SCENE SCENE_CADILLAC
+#define SCENE SCENE_CADILLAC_BENCHMARK
 
 
 #if SCENE == SCENE_DEFAULT_CAMERA
@@ -62,6 +63,10 @@ enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
     #define POLYGON_MODE GL_FILL
 #endif
 #if SCENE == SCENE_CADILLAC
+    #define PROJ_MODE PERSPECTIVE
+    #define POLYGON_MODE GL_FILL
+#endif
+#if SCENE == SCENE_CADILLAC_BENCHMARK
     #define PROJ_MODE PERSPECTIVE
     #define POLYGON_MODE GL_FILL
 #endif
