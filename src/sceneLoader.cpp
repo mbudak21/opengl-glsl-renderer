@@ -36,8 +36,8 @@ void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuin
 
 		// Cadillacs
 		int total = 0;
-		for (int x = -20; x <= -0; x+=2) {
-			for (int y = -20; y <= -0; y+=2) {
+		for (int x = -20; x <= 18; x+=2) {
+			for (int y = -20; y <= 18; y+=2) {
 				for (int z = -50; z >= -58; z-=2) {
 					total += 1;
 					SceneObject* caddillac = new SceneObject("../objects/Cadillac/Cadillac.obj");
@@ -45,17 +45,13 @@ void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuin
 					caddillac->pos = glm::vec3(float(x), float(y), float(z));
 					caddillac->shprg = shprg;
 					Anim::addRotate(caddillac, glm::vec3(10.f, -10.f, 0.f));
+					// Anim::addTranslate(caddillac, glm::vec3(0.f, 0.f, 5.00f), 40);
 					objList->push_back(caddillac);
 				}
 			}
 		}
 		printf("Total cadillacs: %i\n", total);
-		
-
-		
-
-
-		// Anim::addRotate(caddillac, glm::vec3(1.f, -1.f, 0.f));
-		// Anim::addTranslate(caddillac, glm::vec3(1.f, 0.f, 0.f));
+	}
+	if (scene == 903) { // SCENE_SYNTHWAVE
 	}
 }

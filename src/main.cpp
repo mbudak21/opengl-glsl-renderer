@@ -34,7 +34,11 @@ int windowHandle;
 int screen_width = 1024;
 int screen_height = 768;
 
-auto g_lastTime = std::chrono::high_resolution_clock::now();
+int frameCount = 1;
+auto startTime = std::chrono::high_resolution_clock::now();
+float startTimeFp = std::chrono::duration<float>(startTime.time_since_epoch()).count();
+
+auto lastTime = std::chrono::high_resolution_clock::now();
 int numLights = 0;
 glm::vec3 lightWorldPos[MAX_LIGHTS];
 ProjectionMode currentProjMode = PROJ_MODE;
@@ -70,25 +74,9 @@ void keyrelease(unsigned char key, int x, int y) {
 
 void update() {
     auto now = std::chrono::high_resolution_clock::now();
-    float dt = std::chrono::duration<float>(now - g_lastTime).count();
-    g_lastTime = now;
-
-    // === Timing/FPS calculation ===
-    static int   fpsCount = 0;
-    static float fpsTimer = 0.0f;
+    float dt = std::chrono::duration<float>(now - lastTime).count();
 	static float key_delay = 0.0f;
-    fpsCount++;
-    fpsTimer += dt;
 	key_delay += dt;
-
-    if (fpsTimer >= 0.2f) {
-        float fps = fpsCount / fpsTimer;
-        printf("FPS: %.1f\n", fps);
-        fpsCount = 0;
-        fpsTimer = 0.0f;
-    }
-    // =============================
-	
 
 	// === Camera based movement ===
     if (inputManager.isPressed('w')) cam.moveForward(MOVEMENT_SPEED);
@@ -142,14 +130,33 @@ void update() {
 			glutLeaveMainLoop();
 		#endif
 	}
-	Anim::update(dt);
+	Anim::update(frameCount * ANIMATION_SPEED);
     glutPostRedisplay();
 }
 
 
-
+int   fpsCounter = 0;
+float fpsTimer = 0.0f;
 
 void display(void) {
+    auto now = std::chrono::high_resolution_clock::now();
+    float dt = std::chrono::duration<float>(now - lastTime).count();
+    lastTime = now;
+
+    // === Timing/FPS calculation ===
+
+    fpsCounter++;
+    fpsTimer += dt;
+
+    if (fpsTimer >= 0.2f) {
+        float fps = fpsCounter / fpsTimer;
+        // printf("FPS: %.1f\n", fps);
+		printf("FPS: %.1f, Delay: %.3fms\n", fps, dt*1000);
+
+		fpsCounter = 0;
+		fpsTimer = 0.0f;
+    } frameCount++;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	V = cam.getViewMatrix(); // moves world coordinates into camera space
@@ -171,12 +178,11 @@ void display(void) {
 
 	Light::sendLightsToShader(shprg);
 
-	int id=0;
 	for(auto o:objList){
 		o->setShader(shprg);
 		o->renderObject(P, V);
 	}
-	glFlush();
+	glutSwapBuffers();
 }
 
 
@@ -212,7 +218,7 @@ void cleanUp(void) {
 
 int main(int argc, char **argv) {	
 	// Setup freeGLUT
-	unsigned int _glut_mode = GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH;
+	unsigned int _glut_mode = GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH;
 	#ifdef __APPLE__
 	_glut_mode |= GLUT_3_2_CORE_PROFILE;
 	#endif

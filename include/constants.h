@@ -6,6 +6,7 @@
 #define ROTATION_SPEED 0.05f
 #define KEY_DELAY 0.2f
 #define MAX_LIGHTS 4
+#define ANIMATION_SPEED 0.2f
 
 enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
 
@@ -25,9 +26,10 @@ enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
 // Obj.c implementation
 #define SCENE_CADILLAC 901
 #define SCENE_CADILLAC_BENCHMARK 902
+#define SCENE_SYNTHWAVE 903
 
 
-#define SCENE SCENE_CADILLAC_BENCHMARK
+#define SCENE SCENE_SYNTHWAVE
 
 
 #if SCENE == SCENE_DEFAULT_CAMERA
@@ -65,9 +67,13 @@ enum ProjectionMode {PERSPECTIVE, ORTHOGONAL};
 #if SCENE == SCENE_CADILLAC
     #define PROJ_MODE PERSPECTIVE
     #define POLYGON_MODE GL_FILL
-#endif
+#endif 
 #if SCENE == SCENE_CADILLAC_BENCHMARK
     #define PROJ_MODE PERSPECTIVE
     #define POLYGON_MODE GL_FILL
 #endif
+#if SCENE == SCENE_SYNTHWAVE
+    #define PROJ_MODE PERSPECTIVE
+    #define POLYGON_MODE GL_FILL
+#endif 
 #endif
