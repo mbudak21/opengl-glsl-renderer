@@ -25,25 +25,38 @@ SceneObject::SceneObject(const char* path){
 		}
 	}
 }
-void SceneObject::setShader(GLuint ID){
-	this->shprg = ID;
+GLuint SceneObject::getShader(){
+	return this->shprg;
+}
+
+void SceneObject::setShader(GLuint shaderId){
+	if(!fixShader){
+		this->shprg = shaderId;
+	}
+	// printf("Sending new material data...\n");
+	obj* o = this->objInstance;
+	obj_set_prop_loc(o, OBJ_KD, -1, glGetUniformLocation(shaderId, "diffuseMap"), -1);
+	obj_set_prop_loc(o, OBJ_KA, -1, glGetUniformLocation(shaderId, "ambientMap"), -1);
+	obj_set_prop_loc(o, OBJ_KE, -1, glGetUniformLocation(shaderId, "emissiveMap"), -1);
+	obj_set_prop_loc(o, OBJ_KS, -1, glGetUniformLocation(shaderId, "specularMap"), -1);
+	obj_set_prop_loc(o, OBJ_NS, -1, glGetUniformLocation(shaderId, "shininess"), -1);
+	obj_set_prop_loc(o, OBJ_KN, -1, glGetUniformLocation(shaderId, "normal"), -1);
+
+	glUniform1i(glGetUniformLocation(shaderId, "useDiffuseMap"), 1);
+	glUniform1i(glGetUniformLocation(shaderId, "useAmbientMap"), 1);
+	glUniform1i(glGetUniformLocation(shaderId, "useSpecularMap"), 1);
+	glUniform1i(glGetUniformLocation(shaderId, "useEmissiveMap"), 1);
 };
 
 void SceneObject::prepareObject(){
+	// printf("Preparing objects for shading...\n");
     obj* o = this->objInstance;
-    
 	obj_proc(o);
-
-	// layout(location = 0) in vec3 vPos;
-	// layout(location = 1) in vec3 vNorm;
-	// layout(location = 2) in vec2 vTexCoord;
-	// layout(location = 3) in vec3 vTangent;
 	int vTangentLoc = 3;
 	int vNormLoc = 1;
 	int vTexCoordLoc = 2;
 	int vPosLoc = 0;
 	obj_set_vert_loc(o, vTangentLoc, vNormLoc, vTexCoordLoc, vPosLoc);
-
 	// printf("OBJ Diagnostics:\n");
 	// printf("  Materials:       %d\n", obj_num_mtrl(o));
 	// printf("  Vertices:        %d\n", obj_num_vert(o));
@@ -58,11 +71,10 @@ void SceneObject::prepareObject(){
 }
 
 void SceneObject::renderObject(glm::mat4 P, glm::mat4 V){
-	GLuint id = this->shprg;
-	this->renderObject(id, P, V);
+	this->renderObject(P, V, this->shprg);
 }
 
-void SceneObject::renderObject(GLuint shaderId, glm::mat4 P, glm::mat4 V) {
+void SceneObject::renderObject(glm::mat4 P, glm::mat4 V, GLuint shaderId) {
     obj* o = this->objInstance;
     
 	// Matrix M = Translate(pos) * Rotate(rot) * Scale(scale);
@@ -76,23 +88,11 @@ void SceneObject::renderObject(GLuint shaderId, glm::mat4 P, glm::mat4 V) {
 	glm::mat4 M = T * R * S;
 	// glm::mat4 PV_M = PV * M;
 
-	glUseProgram(shprg);
-	setMatrix4fv(shprg, "P", P);
-	setMatrix4fv(shprg, "V", V);
-	setMatrix4fv(shprg, "M", M);
-	setMatrix4fv(shprg, "PVM", P*V*M);
-
-	obj_set_prop_loc(o, OBJ_KD, -1, glGetUniformLocation(shprg, "diffuseMap"), -1);
-	glUniform1i(glGetUniformLocation(shprg,"useDiffuseMap"), 1);
-
-
-  	// obj_set_prop_loc(o, OBJ_KN, -1, glGetUniformLocation(shprg, "NormalTexture"), -1);
-	// obj_set_prop_loc(o, OBJ_KA, -1, glGetUniformLocation(shprg, "matAmb"), -1);
-	// obj_set_prop_loc(o, OBJ_KD, -1, glGetUniformLocation(shprg, "matDiff"), -1);
-	// obj_set_prop_loc(o, OBJ_KS, -1, glGetUniformLocation(shprg, "matSpec"), -1);
-	// obj_set_prop_loc(o, OBJ_KE, -1, -1, -1);
-	// obj_set_prop_loc(o, OBJ_NS, -1, glGetUniformLocation(shprg, "matShininess"), -1);
-	// obj_set_prop_loc(o, OBJ_KD, -1, glGetUniformLocation(shprg, "diffuseMap"), -1);
+	glUseProgram(shaderId);
+	setMatrix4fv(shaderId, "P", P);
+	setMatrix4fv(shaderId, "V", V);
+	setMatrix4fv(shaderId, "M", M);
+	setMatrix4fv(shaderId, "PVM", P*V*M);
 
 	obj_render(o);
 	// printf("vao = %u, vbo = %u, vloc = %d\n", o->vao, o->vbo, o->vloc);

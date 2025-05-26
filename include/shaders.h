@@ -32,11 +32,10 @@ public:
 	static GLuint getCurrentShader();
 	static void useNextShader();
 
-	// temp test flat basic interlaced phong cartoon wireframe
 	static GLuint getTempShader(){
 		return shaderArr[0].programID;
 	}
-	static GLuint getFlatShader(){
+	static GLuint getTestShader(){
 		return shaderArr[1].programID;
 	}
 	static GLuint getBasicShader(){
@@ -51,8 +50,11 @@ public:
 	static GLuint getCartoonShader(){
 		return shaderArr[5].programID;
 	}
-	static GLuint getWireframeShader(){
+	static GLuint getFlatShader(){
 		return shaderArr[6].programID;
+	}
+	static GLuint getWireframeShader(){
+		return shaderArr[7].programID;
 	}
 };
 

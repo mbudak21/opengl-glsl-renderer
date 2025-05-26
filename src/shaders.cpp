@@ -7,7 +7,7 @@
 using namespace std;
 
 int ShaderManager::currentShaderIndex = 0;
-vector<ShaderProgram> ShaderManager::shaderArr;
+extern vector<ShaderProgram> ShaderManager::shaderArr;
 
 
 std::string ShaderManager::loadShaderFromFile(const std::string& filename) {
@@ -47,7 +47,7 @@ GLuint ShaderManager::compileShaderProgram(const std::string& vs_str, const std:
 		printf("Error in vertex shader!\n");
 		printShaderErrorInfo(vs);
 		glDeleteShader(vs);
-		return NULL;
+		return -1;
 	}
 
 	// === Fragment Shader ===
@@ -60,7 +60,7 @@ GLuint ShaderManager::compileShaderProgram(const std::string& vs_str, const std:
 		printShaderErrorInfo(fs);
 		glDeleteShader(fs);
 		glDeleteShader(vs); // Also delete vertex shader if frag fails
-		return NULL;
+		return -1;
 	}
 
 	// === Geometry Shader (if exists) === 
@@ -79,7 +79,7 @@ GLuint ShaderManager::compileShaderProgram(const std::string& vs_str, const std:
 			glDeleteShader(gs);
 			glDeleteShader(fs);
 			glDeleteShader(vs);
-			return NULL;
+			return -1;
 		}
 	}
 
@@ -94,7 +94,7 @@ GLuint ShaderManager::compileShaderProgram(const std::string& vs_str, const std:
 		printf("Link error in shader program!\n");
 		printShaderErrorInfo(glProgramID);
 		glDeleteProgram(glProgramID);
-		return NULL;
+		return -1;
 	}
 
 	// Delete shaders after linking
@@ -128,61 +128,59 @@ void ShaderManager::printShaderErrorInfo(GLuint shaderProgram) {
 void ShaderManager::initShaders() {
 	shaderArr.clear();
 	ShaderProgram temp;
-	temp.vertexSource = loadShaderFromFile("./shaders/temp_vertex.glsl");
-	temp.fragmentSource = loadShaderFromFile("./shaders/temp_frag.glsl");
+	temp.vertexSource = loadShaderFromFile("./shaders/0-temp_vertex.glsl");
+	temp.fragmentSource = loadShaderFromFile("./shaders/0-temp_frag.glsl");
 	temp.programID = compileShaderProgram(temp.vertexSource, temp.fragmentSource);
 	temp.name = "temp";
-
 	shaderArr.push_back(temp);
 
 	ShaderProgram test;
-	test.vertexSource = loadShaderFromFile("./shaders/test_vertex.glsl");
-	test.fragmentSource = loadShaderFromFile("./shaders/test_frag.glsl");
+	test.vertexSource = loadShaderFromFile("./shaders/1-test_vertex.glsl");
+	test.fragmentSource = loadShaderFromFile("./shaders/1-test_frag.glsl");
 	test.programID = compileShaderProgram(test.vertexSource, test.fragmentSource);
 	test.name = "test";
 	shaderArr.push_back(test);	
 
-
-	ShaderProgram flat;
-	flat.vertexSource = loadShaderFromFile("./shaders/flat_vertex.glsl");
-	flat.geometrySource = loadShaderFromFile("./shaders/flat_geom.glsl");
-	flat.fragmentSource = loadShaderFromFile("./shaders/flat_frag.glsl");
-	flat.programID = compileShaderProgram(flat.vertexSource, flat.fragmentSource, flat.geometrySource);
-	flat.name = "flat";
-	shaderArr.push_back(flat); 
-
 	ShaderProgram basic;
-	basic.vertexSource = loadShaderFromFile("./shaders/1-basic_vertex.glsl");
-	basic.fragmentSource = loadShaderFromFile("./shaders/1-basic_frag.glsl");
+	basic.vertexSource = loadShaderFromFile("./shaders/2-basic_vertex.glsl");
+	basic.fragmentSource = loadShaderFromFile("./shaders/2-basic_frag.glsl");
 	basic.programID = compileShaderProgram(basic.vertexSource, basic.fragmentSource);
 	basic.name = "basic";
 	shaderArr.push_back(basic);
 
 	ShaderProgram interlaced;
-	interlaced.vertexSource = loadShaderFromFile("./shaders/2-interlaced_vertex.glsl");
-	interlaced.fragmentSource = loadShaderFromFile("./shaders/2-interlaced_frag.glsl");
+	interlaced.vertexSource = loadShaderFromFile("./shaders/3-interlaced_vertex.glsl");
+	interlaced.fragmentSource = loadShaderFromFile("./shaders/3-interlaced_frag.glsl");
 	interlaced.programID = compileShaderProgram(interlaced.vertexSource, interlaced.fragmentSource);
 	interlaced.name = "interlaced";
 	shaderArr.push_back(interlaced);
 
 	ShaderProgram phong;
-	phong.vertexSource = loadShaderFromFile("./shaders/3-phong_vertex.glsl");
-	phong.fragmentSource = loadShaderFromFile("./shaders/3-phong_frag.glsl");
+	phong.vertexSource = loadShaderFromFile("./shaders/4-phong_vertex.glsl");
+	phong.fragmentSource = loadShaderFromFile("./shaders/4-phong_frag.glsl");
 	phong.programID = compileShaderProgram(phong.vertexSource, phong.fragmentSource);
 	phong.name = "phong";
 	shaderArr.push_back(phong);
 
 	ShaderProgram cartoon;
-	cartoon.vertexSource = loadShaderFromFile("./shaders/4-cartoon_vertex.glsl");
-	cartoon.fragmentSource = loadShaderFromFile("./shaders/4-cartoon_frag.glsl");
+	cartoon.vertexSource = loadShaderFromFile("./shaders/5-cartoon_vertex.glsl");
+	cartoon.fragmentSource = loadShaderFromFile("./shaders/5-cartoon_frag.glsl");
 	cartoon.programID = compileShaderProgram(cartoon.vertexSource, cartoon.fragmentSource);
 	cartoon.name = "cartoon";
 	shaderArr.push_back(cartoon);
 
+	ShaderProgram flat;
+	flat.vertexSource = loadShaderFromFile("./shaders/6-flat_vertex.glsl");
+	flat.geometrySource = loadShaderFromFile("./shaders/6-flat_geom.glsl");
+	flat.fragmentSource = loadShaderFromFile("./shaders/6-flat_frag.glsl");
+	flat.programID = compileShaderProgram(flat.vertexSource, flat.fragmentSource, flat.geometrySource);
+	flat.name = "flat";
+	shaderArr.push_back(flat); 
+
 	ShaderProgram wireframe;
-	wireframe.vertexSource = loadShaderFromFile("./shaders/wireframe_vertex.glsl");
-	wireframe.geometrySource = loadShaderFromFile("./shaders/wireframe_geom.glsl");
-	wireframe.fragmentSource = loadShaderFromFile("./shaders/wireframe_frag.glsl");
+	wireframe.vertexSource = loadShaderFromFile("./shaders/7-wireframe_vertex.glsl");
+	wireframe.geometrySource = loadShaderFromFile("./shaders/7-wireframe_geom.glsl");
+	wireframe.fragmentSource = loadShaderFromFile("./shaders/7-wireframe_frag.glsl");
 	wireframe.programID = compileShaderProgram(wireframe.vertexSource, wireframe.fragmentSource, wireframe.geometrySource);
 	wireframe.name = "wireframe";
 	shaderArr.push_back(wireframe);
@@ -202,8 +200,13 @@ void ShaderManager::useNextShader() {
 }
 
 GLuint ShaderManager::getCurrentShader() {
-	if (shaderArr.empty()) return 0;
-	return shaderArr[currentShaderIndex].programID;
+	if (shaderArr.empty()) {
+		perror("shadarArr access without initialization!");
+		return -1;
+	} else {
+		// printf("returning shader id: %i\n", currentShaderIndex);
+		return shaderArr[currentShaderIndex].programID;
+	}
 }
 
 // std::vector<ShaderProgram> getShaderArray() {

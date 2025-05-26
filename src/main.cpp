@@ -27,7 +27,7 @@
 Camera cam;
 InputManager inputManager; // Handles keyboard input
 static std::vector<SceneObject*> objList; // Global pointer to list of Obj's
-GLuint shprg; // Shader program id
+GLuint currShprg;
 int windowHandle;
 
 // Constants
@@ -78,6 +78,18 @@ void update() {
 	static float key_delay = 0.0f;
 	key_delay += dt;
 
+	if (inputManager.isPressed('p') && key_delay >= KEY_DELAY) printf("X: %f, Y: %f, Z: %f\n", cam.position.x, cam.position.y, cam.position.z);
+	
+	if (inputManager.isPressed(',') && key_delay >= KEY_DELAY) { // First-person view
+		cam.position = {-0.45f, 1.1f, -0.395f};
+		cam.setRotation({-8.0f, 0.0f, 0.0f});
+	}
+	if (inputManager.isPressed('.') && key_delay >= KEY_DELAY) { // Third-person view
+		cam.position = {0.0f, 2.75f, 7.50f};
+		cam.setRotation({0.0f, 0.0f, 0.0f});
+	}
+	
+
 	// === Camera based movement ===
     if (inputManager.isPressed('w')) cam.moveForward(MOVEMENT_SPEED);
     if (inputManager.isPressed('a')) cam.moveRight(-MOVEMENT_SPEED);
@@ -117,7 +129,10 @@ void update() {
 	if (inputManager.isPressed('b') && key_delay >= KEY_DELAY) {
 		key_delay = 0.f;
 		ShaderManager::useNextShader();
-		shprg = ShaderManager::getCurrentShader();
+		currShprg = ShaderManager::getCurrentShader();
+		for(auto o:objList){
+			o->setShader(currShprg);
+		}
 	}
 	
 	// Exit
@@ -135,7 +150,7 @@ void update() {
 }
 
 
-int   fpsCounter = 0;
+int fpsCounter = 0;
 float fpsTimer = 0.0f;
 
 void display(void) {
@@ -168,28 +183,35 @@ void display(void) {
 	}
 
 	// Select the shader program to be used during rendering 
-	glUseProgram(shprg);
+	glUseProgram(currShprg);
 
 	// Pass the uniforms which are the same for all meshes/objects
 	// setMatrix4fv(shprg, "PV", P*V);
 	// setMatrix4fv(shprg, "P", P);
 	// setMatrix4fv(shprg, "V", V);
-	setVector3fv(shprg, "camPos", cam.position);
+	setVector3fv(currShprg, "camPos", cam.position);
 
-	Light::sendLightsToShader(shprg);
+	Light::sendLightsToShader(currShprg);
 
 	for(auto o:objList){
-		o->setShader(shprg);
-		o->renderObject(P, V);
+		if(o->getShader() <= 0){ // Uninitialized
+			o->renderObject(P, V, currShprg);
+		}
+		else {
+			// printf("VAL: %i\n", o->shprg);
+			o->renderObject(P, V);
+		}
+		
 	}
 	glutSwapBuffers();
 }
 
 
 void init(void) {
-	// Compile and link the given shader program (vertex shader and fragment shader)
 	ShaderManager::initShaders();
-	shprg = ShaderManager::getCurrentShader();
+	currShprg = ShaderManager::getCurrentShader();
+	loadScene(SCENE, &cam, &objList, currShprg);
+
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	//glFrontFace(GL_CCW);
@@ -198,7 +220,6 @@ void init(void) {
 	
 	for(auto o:objList){
 		o->prepareObject();
-		o->setShader(shprg);
 	}
 }
 
@@ -249,10 +270,10 @@ int main(int argc, char **argv) {
 	fprintf(stdout, "OpenGL version: %s\n", (const char *)glGetString(GL_VERSION));
 	fprintf(stdout, "OpenGL vendor: %s\n\n", glGetString(GL_VENDOR));
 
-	shprg = ShaderManager::getCurrentShader();
-	loadScene(SCENE, &cam, &objList, shprg);
+	
 
 	init();
+	
 
 	// Object Count
 	printf("Objects being rendered: %i\n", objList.size());

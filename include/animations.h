@@ -10,19 +10,19 @@ namespace Anim {
     struct Rot {
         SceneObject*   target;
         glm::vec3   speedPerFrame;
-        int resetFrame;
+        const int resetFrame;
     };
     struct Trans {
-        SceneObject*   target;
-        glm::vec3   pos;
-        glm::vec3   speedPerFrame;
-        int resetFrame;
+        SceneObject* target;
+        glm::vec3 startPos;
+        glm::vec3 endPos;
+        glm::vec3 speedPerFrame;
     };
     struct Scale {
         SceneObject*   target;
         glm::vec3   scale;
         glm::vec3   speedPerFrame;
-        int resetFrame;
+        const int resetFrame;
     };
 
     // C++17 inline variables: one shared instance
@@ -33,8 +33,8 @@ namespace Anim {
     inline void addRotate(SceneObject* m, const glm::vec3 &spd, int resetframe = INT_MAX) {
         rotations.push_back({m, spd, resetframe});
     }
-    inline void addTranslate(SceneObject* m, const glm::vec3 &spd, int resetframe = INT_MAX) {
-        translations.push_back({m, m->pos, spd, resetframe});
+    inline void addTranslate(SceneObject* m, const glm::vec3 &spd, const glm::vec3 &start, const glm::vec3 &end) {
+        translations.push_back({ m, start, end, spd });
     }
     inline void addScale(SceneObject* m, const glm::vec3 &spd, int resetframe = INT_MAX) {
         scalings.push_back({m, m->scale, spd, resetframe});
@@ -47,7 +47,14 @@ namespace Anim {
         }
         // translations
         for (auto &t : translations) {
-            t.target->pos = t.pos + t.speedPerFrame * static_cast<float>(frameCount % t.resetFrame);
+            t.target->pos += t.speedPerFrame;
+            for (int i = 0; i < 3; i++) {
+                if ((t.startPos[i] < t.endPos[i]) ) { // Moving in +Axis
+                    if ((t.target->pos[i] >= t.endPos[i])) {
+                        t.target->pos[i] = t.startPos[i];
+                    }
+                }
+            }
         }
         // scalings
         for (auto &s : scalings) {

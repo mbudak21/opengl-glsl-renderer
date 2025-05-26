@@ -2,8 +2,8 @@
 #define _FEATURES_H_
 #include <GL/glew.h>
 
-#define MOVEMENT_SPEED 0.01f
-#define ROTATION_SPEED 0.05f
+#define MOVEMENT_SPEED 0.03f
+#define ROTATION_SPEED 0.50f
 #define KEY_DELAY 0.2f
 #define MAX_LIGHTS 4
 #define ANIMATION_SPEED 0.2f

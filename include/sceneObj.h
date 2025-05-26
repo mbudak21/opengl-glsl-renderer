@@ -14,9 +14,11 @@
 class SceneObject{
 private:
 	static std::unordered_map<std::string, std::shared_ptr<obj>> objectMap;
+	GLuint shprg = 0;
 public:
     obj* objInstance;
-	GLuint shprg;
+	bool fixShader = false;
+	
 	glm::vec3 pos = {0.f, 0.f, 0.f};
 	glm::vec3 rot = {0.f, 0.f, 0.f};
 	glm::vec3 scale = {1.f, 1.f, 1.f};
@@ -24,10 +26,11 @@ public:
     SceneObject(obj* o): objInstance(o){};
 
 	SceneObject(const char* path);
+	GLuint getShader();
 	void setShader(GLuint ID);
 	void prepareObject();
 	void renderObject(glm::mat4 P, glm::mat4 V);
-	void renderObject(GLuint shprg, glm::mat4 P, glm::mat4 V);
+	void renderObject(glm::mat4 P, glm::mat4 V, GLuint shaderId);
 	
 };
 

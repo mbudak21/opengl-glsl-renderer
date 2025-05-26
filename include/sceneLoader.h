@@ -8,6 +8,7 @@
 #include "animations.h"
 #include <stdio.h>
 #include "sceneObj.h"
+#include "shaders.h"
 
 void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuint shprg);
 
