@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 cmake_policy(SET CMP0072 NEW)
 
 # set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -DNDEBUG") # Optimize for release
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -O0")
 
 # Find required packages
 find_package(OpenGL REQUIRED)

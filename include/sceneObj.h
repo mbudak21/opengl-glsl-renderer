@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include <shaders.h>
+#include "locCache.h"
 
 
 class SceneObject{

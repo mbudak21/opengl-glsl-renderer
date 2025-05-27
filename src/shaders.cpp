@@ -128,62 +128,62 @@ void ShaderManager::printShaderErrorInfo(GLuint shaderProgram) {
 void ShaderManager::initShaders() {
 	shaderArr.clear();
 	ShaderProgram temp;
-	temp.vertexSource = loadShaderFromFile("./shaders/0-temp_vertex.glsl");
-	temp.fragmentSource = loadShaderFromFile("./shaders/0-temp_frag.glsl");
+	temp.vertexSource = loadShaderFromFile("./shaders/test/0-temp_vertex.glsl");
+	temp.fragmentSource = loadShaderFromFile("./shaders/test/0-temp_frag.glsl");
 	temp.programID = compileShaderProgram(temp.vertexSource, temp.fragmentSource);
 	temp.name = "temp";
 	shaderArr.push_back(temp);
 
 	ShaderProgram test;
-	test.vertexSource = loadShaderFromFile("./shaders/1-test_vertex.glsl");
-	test.fragmentSource = loadShaderFromFile("./shaders/1-test_frag.glsl");
+	test.vertexSource = loadShaderFromFile("./shaders/test/1-test_vertex.glsl");
+	test.fragmentSource = loadShaderFromFile("./shaders/test/1-test_frag.glsl");
 	test.programID = compileShaderProgram(test.vertexSource, test.fragmentSource);
 	test.name = "test";
 	shaderArr.push_back(test);	
 
 	ShaderProgram basic;
-	basic.vertexSource = loadShaderFromFile("./shaders/2-basic_vertex.glsl");
-	basic.fragmentSource = loadShaderFromFile("./shaders/2-basic_frag.glsl");
+	basic.vertexSource = loadShaderFromFile("./shaders/basic/2-basic_vertex.glsl");
+	basic.fragmentSource = loadShaderFromFile("./shaders/basic/2-basic_frag.glsl");
 	basic.programID = compileShaderProgram(basic.vertexSource, basic.fragmentSource);
 	basic.name = "basic";
 	shaderArr.push_back(basic);
 
 	ShaderProgram interlaced;
-	interlaced.vertexSource = loadShaderFromFile("./shaders/3-interlaced_vertex.glsl");
-	interlaced.fragmentSource = loadShaderFromFile("./shaders/3-interlaced_frag.glsl");
+	interlaced.vertexSource = loadShaderFromFile("./shaders/basic/3-interlaced_vertex.glsl");
+	interlaced.fragmentSource = loadShaderFromFile("./shaders/basic/3-interlaced_frag.glsl");
 	interlaced.programID = compileShaderProgram(interlaced.vertexSource, interlaced.fragmentSource);
 	interlaced.name = "interlaced";
 	shaderArr.push_back(interlaced);
 
 	ShaderProgram phong;
-	phong.vertexSource = loadShaderFromFile("./shaders/4-phong_vertex.glsl");
-	phong.fragmentSource = loadShaderFromFile("./shaders/4-phong_frag.glsl");
+	phong.vertexSource = loadShaderFromFile("./shaders/phong/4-phong_vertex.glsl");
+	phong.fragmentSource = loadShaderFromFile("./shaders/phong/4-phong_frag.glsl");
 	phong.programID = compileShaderProgram(phong.vertexSource, phong.fragmentSource);
 	phong.name = "phong";
 	shaderArr.push_back(phong);
 
-	ShaderProgram cartoon;
-	cartoon.vertexSource = loadShaderFromFile("./shaders/5-cartoon_vertex.glsl");
-	cartoon.fragmentSource = loadShaderFromFile("./shaders/5-cartoon_frag.glsl");
-	cartoon.programID = compileShaderProgram(cartoon.vertexSource, cartoon.fragmentSource);
-	cartoon.name = "cartoon";
-	shaderArr.push_back(cartoon);
+	// ShaderProgram cartoon;
+	// cartoon.vertexSource = loadShaderFromFile("./shaders/5-cartoon_vertex.glsl");
+	// cartoon.fragmentSource = loadShaderFromFile("./shaders/5-cartoon_frag.glsl");
+	// cartoon.programID = compileShaderProgram(cartoon.vertexSource, cartoon.fragmentSource);
+	// cartoon.name = "cartoon";
+	// shaderArr.push_back(cartoon);
 
-	ShaderProgram flat;
-	flat.vertexSource = loadShaderFromFile("./shaders/6-flat_vertex.glsl");
-	flat.geometrySource = loadShaderFromFile("./shaders/6-flat_geom.glsl");
-	flat.fragmentSource = loadShaderFromFile("./shaders/6-flat_frag.glsl");
-	flat.programID = compileShaderProgram(flat.vertexSource, flat.fragmentSource, flat.geometrySource);
-	flat.name = "flat";
-	shaderArr.push_back(flat); 
+	// ShaderProgram flat; // TODO: Fix the loading of flat shader
+	// flat.vertexSource = loadShaderFromFile("./shaders/7-wireframe_vertex.glsl");
+	// flat.geometrySource = loadShaderFromFile("./shaders/7-wireframe_geom.glsl");
+	// flat.fragmentSource = loadShaderFromFile("./shaders/7-wireframe_frag.glsl");
+	// flat.programID = compileShaderProgram(flat.vertexSource, flat.fragmentSource, flat.geometrySource);
+	// flat.name = "flat";
+	// shaderArr.push_back(flat); 
 
-	ShaderProgram wireframe;
-	wireframe.vertexSource = loadShaderFromFile("./shaders/7-wireframe_vertex.glsl");
-	wireframe.geometrySource = loadShaderFromFile("./shaders/7-wireframe_geom.glsl");
-	wireframe.fragmentSource = loadShaderFromFile("./shaders/7-wireframe_frag.glsl");
-	wireframe.programID = compileShaderProgram(wireframe.vertexSource, wireframe.fragmentSource, wireframe.geometrySource);
-	wireframe.name = "wireframe";
-	shaderArr.push_back(wireframe);
+	// ShaderProgram wireframe;
+	// wireframe.vertexSource = loadShaderFromFile("./shaders/7-wireframe_vertex.glsl");
+	// wireframe.geometrySource = loadShaderFromFile("./shaders/7-wireframe_geom.glsl");
+	// wireframe.fragmentSource = loadShaderFromFile("./shaders/7-wireframe_frag.glsl");
+	// wireframe.programID = compileShaderProgram(wireframe.vertexSource, wireframe.fragmentSource, wireframe.geometrySource);
+	// wireframe.name = "wireframe";
+	// shaderArr.push_back(wireframe);
 }
 
 void ShaderManager::destroyAllShaders() {
@@ -230,16 +230,16 @@ GLuint ShaderManager::getCurrentShader() {
 void setMatrix4fv(GLuint programID, const std::string &name, glm::mat4 matrix) {
 	// TODO: Cache the location 
 	// GLint loc = glGetUniformLocation(programID, name.c_str());
-	GLint loc = locCache::get(programID, name.c_str());
+	GLint loc = locCache::getUniformLoc(programID, name.c_str());
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void setVector3fv(GLuint programID, const std::string &name, glm::vec3 vector) {
-	GLint loc = locCache::get(programID, name.c_str());
+	GLint loc = locCache::getUniformLoc(programID, name.c_str());
 	glUniform3fv(loc, 1, glm::value_ptr(vector));
 }
 
 void setFloat1f(GLuint programID, const std::string &name, float value){
-	GLint loc = locCache::get(programID, name.c_str());
+	GLint loc = locCache::getUniformLoc(programID, name.c_str());
 	glUniform1f(loc, value);
 }

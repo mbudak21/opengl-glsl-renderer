@@ -18,6 +18,12 @@ namespace Anim {
         glm::vec3 endPos;
         glm::vec3 speedPerFrame;
     };
+    struct LightTrans {
+        Light* target;
+        glm::vec3 startPos;
+        glm::vec3 endPos;
+        glm::vec3 speedPerFrame;
+    };
     struct Scale {
         SceneObject*   target;
         glm::vec3   scale;
@@ -26,15 +32,19 @@ namespace Anim {
     };
 
     // C++17 inline variables: one shared instance
-    inline std::vector<Rot>      rotations;
-    inline std::vector<Trans>    translations;
-    inline std::vector<Scale>    scalings;
+    inline std::vector<Rot>         rotations;
+    inline std::vector<Trans>       translations;
+    inline std::vector<LightTrans>  lightTranslations;
+    inline std::vector<Scale>       scalings;
 
     inline void addRotate(SceneObject* m, const glm::vec3 &spd, int resetframe = INT_MAX) {
         rotations.push_back({m, spd, resetframe});
     }
     inline void addTranslate(SceneObject* m, const glm::vec3 &spd, const glm::vec3 &start, const glm::vec3 &end) {
         translations.push_back({ m, start, end, spd });
+    }
+    inline void addTranslate(Light* l, const glm::vec3 &spd, const glm::vec3 &start, const glm::vec3 &end) {
+        lightTranslations.push_back({ l, start, end, spd });
     }
     inline void addScale(SceneObject* m, const glm::vec3 &spd, int resetframe = INT_MAX) {
         scalings.push_back({m, m->scale, spd, resetframe});
@@ -48,6 +58,17 @@ namespace Anim {
         // translations
         for (auto &t : translations) {
             t.target->pos += t.speedPerFrame;
+            for (int i = 0; i < 3; i++) {
+                if ((t.startPos[i] < t.endPos[i]) ) { // Moving in +Axis
+                    if ((t.target->pos[i] >= t.endPos[i])) {
+                        t.target->pos[i] = t.startPos[i];
+                    }
+                }
+            }
+        }
+        // Light translations
+        for (auto &t : lightTranslations) {
+            t.target->setPosition(t.speedPerFrame + t.target->pos);
             for (int i = 0; i < 3; i++) {
                 if ((t.startPos[i] < t.endPos[i]) ) { // Moving in +Axis
                     if ((t.target->pos[i] >= t.endPos[i])) {

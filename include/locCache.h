@@ -1,5 +1,5 @@
-#ifndef _SCENE_OBJ_H_
-#define _SCENE_OBJ_H_s
+#ifndef _LOC_CACHE_H_
+#define _LOC_CACHE_H_
 #include <unordered_map>
 #include <string>
 #include <GL/glew.h>
@@ -11,12 +11,15 @@ private:
     static std::unordered_map<GLuint, std::unordered_map<std::string, GLuint>> locMap;
 
 public:
-    static GLuint get(GLuint program, const std::string& name) {
+    static GLuint getUniformLoc(GLuint program, const std::string& name) {
         auto& progMap = locMap[program]; // reference to this program's submap
         auto it = progMap.find(name);
         if (it != progMap.end()) return it->second;
 
         GLuint loc = glGetUniformLocation(program, name.c_str());
+        if(loc < 0) {
+            printf("WARNING: couldn't find loc of %s", name);
+        }
         progMap[name] = loc;
         return loc;
     }

@@ -133,6 +133,7 @@ void update() {
 		for(auto o:objList){
 			o->setShader(currShprg);
 		}
+		Light::sendLightsToShader(currShprg);
 	}
 	
 	// Exit
@@ -163,7 +164,7 @@ void display(void) {
     fpsCounter++;
     fpsTimer += dt;
 
-    if (fpsTimer >= 0.2f) {
+    if (fpsTimer >= 1.0f) {
         float fps = fpsCounter / fpsTimer;
         // printf("FPS: %.1f\n", fps);
 		printf("FPS: %.1f, Delay: %.3fms\n", fps, dt*1000);
@@ -184,24 +185,12 @@ void display(void) {
 
 	// Select the shader program to be used during rendering 
 	glUseProgram(currShprg);
-
-	// Pass the uniforms which are the same for all meshes/objects
-	// setMatrix4fv(shprg, "PV", P*V);
-	// setMatrix4fv(shprg, "P", P);
-	// setMatrix4fv(shprg, "V", V);
 	setVector3fv(currShprg, "camPos", cam.position);
 
 	Light::sendLightsToShader(currShprg);
 
 	for(auto o:objList){
-		if(o->getShader() <= 0){ // Uninitialized
-			o->renderObject(P, V, currShprg);
-		}
-		else {
-			// printf("VAL: %i\n", o->shprg);
-			o->renderObject(P, V);
-		}
-		
+		o->renderObject(P, V);		
 	}
 	glutSwapBuffers();
 }
@@ -270,11 +259,8 @@ int main(int argc, char **argv) {
 	fprintf(stdout, "OpenGL version: %s\n", (const char *)glGetString(GL_VERSION));
 	fprintf(stdout, "OpenGL vendor: %s\n\n", glGetString(GL_VENDOR));
 
-	
-
 	init();
 	
-
 	// Object Count
 	printf("Objects being rendered: %i\n", objList.size());
 
