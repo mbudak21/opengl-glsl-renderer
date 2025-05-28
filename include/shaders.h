@@ -32,29 +32,9 @@ public:
 	static GLuint getCurrentShader();
 	static void useNextShader();
 
-	static GLuint getTempShader(){
-		return shaderArr[0].programID;
-	}
-	static GLuint getTestShader(){
-		return shaderArr[1].programID;
-	}
-	static GLuint getBasicShader(){
+	// TODO: Use enums
+	static GLuint getCubemapShader(){
 		return shaderArr[2].programID;
-	}
-	static GLuint getInterlacedShader(){
-		return shaderArr[3].programID;
-	}
-	static GLuint getPhongShader(){
-		return shaderArr[4].programID;
-	}
-	static GLuint getCartoonShader(){
-		return shaderArr[5].programID;
-	}
-	static GLuint getFlatShader(){
-		return shaderArr[6].programID;
-	}
-	static GLuint getWireframeShader(){
-		return shaderArr[7].programID;
 	}
 };
 

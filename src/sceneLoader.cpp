@@ -85,7 +85,7 @@ void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuin
 		glm::vec3 lightDiff = {1.0, 0.9, 0.9};
 		glm::vec3 lightSpec = {1.0, 0.9, 0.9};
 		glm::vec3 lightDir = {0.0, 0.0, -1.0};
-		float lightCutoff = 45.f;
+		float lightCutoff = 90.f;
 		float lightConstant = 1.0f;
 		float lightLinear = 0.045f;
 		float lightQuad = 0.0075f;
@@ -103,8 +103,8 @@ void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuin
 
 		cubemap->scale = {680.f, 680.f, 680.f};
 		cubemap->pos = {0.f, -300.f, 0.f};
-		// cubemap->setShader(ShaderManager::getTestShader());
-		// cubemap->fixShader = true;
+		cubemap->setShader(ShaderManager::getCubemapShader());
+		cubemap->fixShader = true;
 
 		float roadLenght = 24.f;
 		float roadWidth = 8.0f;
@@ -113,7 +113,7 @@ void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuin
 		caddillac->rot = {270.0f, 0.0f, 0.0f};
 		caddillac->pos = {0.0f, 0.0f, 0.0f};
 
-		float const carSpeed = 1.f; 
+		float const carSpeed = 0.2f; 
 		glm::vec3 vec = {0.0f, 0.0f, carSpeed};
 		int const road_segments = 30;
 		float const road_offset = +24.0f;
@@ -144,7 +144,7 @@ void loadScene(int scene, Camera* cam, std::vector<SceneObject*>* objList, GLuin
 			// glm::vec3 lampSpec {0.2f, 0.2f, 0.2f};
 
 
-			if (i%2 == 0){
+			if (i%4 == 0){
 				SceneObject* lampLeft = new SceneObject("../objects/RoadSkybox/lamp.obj");
 				SceneObject* lampRight = new SceneObject("../objects/RoadSkybox/lamp.obj");
 

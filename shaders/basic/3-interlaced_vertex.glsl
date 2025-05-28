@@ -6,8 +6,6 @@ layout(location = 2) in vec2 vTexCoord;
 layout(location = 3) in vec3 vTangent;
 
 uniform mat4 P;
-uniform mat4 M;
-uniform mat4 PV;
 uniform mat4 PVM;
 
 out vec4 fragColor;

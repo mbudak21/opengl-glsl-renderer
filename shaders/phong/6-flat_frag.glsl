@@ -1,6 +1,6 @@
 // #version 420 core
 
-// in vec3 fragPos;
+// in vec3 fPos;
 // in vec2 fragTexCoord;
 // in vec3 fragNormal;
 // in vec3 faceNormal;

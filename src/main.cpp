@@ -263,6 +263,9 @@ int main(int argc, char **argv) {
 	
 	// Object Count
 	printf("Objects being rendered: %i\n", objList.size());
+	GLint maxFragUniforms;
+	glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, &maxFragUniforms);
+	printf("Max fragment uniform components: %d\n", maxFragUniforms);
 
 	glutMainLoop();	
 

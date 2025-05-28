@@ -54,7 +54,8 @@ void main() {
     vec3 diffuse  = vec3(0.0);
     vec3 specular = vec3(0.0);
 
-    for (int i = 0; i < numLights; ++i) {
+    int count = min(numLights, MAX_LIGHTS);
+    for (int i = 0; i < count; ++i) {
         float distance = length(lights[i].position - fragPos);
         float attenuation = 1.0 / (lights[i].constant + lights[i].linear * distance + lights[i].quadratic * distance * distance);
         vec3 L = normalize(lights[i].position - fragPos);
