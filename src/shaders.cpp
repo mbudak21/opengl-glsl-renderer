@@ -8,6 +8,7 @@ using namespace std;
 
 int ShaderManager::currentShaderIndex = 0;
 extern vector<ShaderProgram> ShaderManager::shaderArr;
+bool ShaderManager::perlinShaderUsed = false; 
 
 
 std::string ShaderManager::loadShaderFromFile(const std::string& filename) {
@@ -128,7 +129,6 @@ void ShaderManager::printShaderErrorInfo(GLuint shaderProgram) {
 void ShaderManager::initShaders() {
 	std::string base_vertex_src = loadShaderFromFile("./shaders/base_vertex.glsl");
 
-
 	shaderArr.clear();
 	ShaderProgram temp;
 	temp.vertexSource = base_vertex_src;
@@ -151,33 +151,41 @@ void ShaderManager::initShaders() {
 	cubemap.name = "cubemap";
 	shaderArr.push_back(cubemap);
 
-	ShaderProgram basic;
-	basic.vertexSource = base_vertex_src;
-	basic.fragmentSource = loadShaderFromFile("./shaders/basic/2-basic_frag.glsl");
-	basic.programID = compileShaderProgram(basic.vertexSource, basic.fragmentSource);
-	basic.name = "basic";
-	shaderArr.push_back(basic);
+	ShaderProgram perlin;
+	perlin.vertexSource = loadShaderFromFile("./shaders/perlin/perlin_vertex.glsl");
+	perlin.geometrySource = loadShaderFromFile("./shaders/perlin/perlin_geom.glsl");
+	perlin.fragmentSource = loadShaderFromFile("./shaders/perlin/perlin_frag.glsl");
+	perlin.programID = compileShaderProgram(perlin.vertexSource, perlin.fragmentSource, perlin.geometrySource);
+	perlin.name = "perlin";
+	shaderArr.push_back(perlin);
 
-	ShaderProgram interlaced;
-	interlaced.vertexSource = loadShaderFromFile("./shaders/basic/3-interlaced_vertex.glsl");
-	interlaced.fragmentSource = loadShaderFromFile("./shaders/basic/3-interlaced_frag.glsl");
-	interlaced.programID = compileShaderProgram(interlaced.vertexSource, interlaced.fragmentSource);
-	interlaced.name = "interlaced";
-	shaderArr.push_back(interlaced);
+	// ShaderProgram basic;
+	// basic.vertexSource = base_vertex_src;
+	// basic.fragmentSource = loadShaderFromFile("./shaders/basic/2-basic_frag.glsl");
+	// basic.programID = compileShaderProgram(basic.vertexSource, basic.fragmentSource);
+	// basic.name = "basic";
+	// shaderArr.push_back(basic);
 
-	ShaderProgram phong;
-	phong.vertexSource = base_vertex_src;
-	phong.fragmentSource = loadShaderFromFile("./shaders/phong/4-phong_frag.glsl");
-	phong.programID = compileShaderProgram(phong.vertexSource, phong.fragmentSource);
-	phong.name = "phong";
-	shaderArr.push_back(phong);
+	// ShaderProgram interlaced;
+	// interlaced.vertexSource = loadShaderFromFile("./shaders/basic/3-interlaced_vertex.glsl");
+	// interlaced.fragmentSource = loadShaderFromFile("./shaders/basic/3-interlaced_frag.glsl");
+	// interlaced.programID = compileShaderProgram(interlaced.vertexSource, interlaced.fragmentSource);
+	// interlaced.name = "interlaced";
+	// shaderArr.push_back(interlaced);
 
-	ShaderProgram cartoon;
-	cartoon.vertexSource = base_vertex_src;
-	cartoon.fragmentSource = loadShaderFromFile("./shaders/phong/5-cartoon_frag.glsl");
-	cartoon.programID = compileShaderProgram(cartoon.vertexSource, cartoon.fragmentSource);
-	cartoon.name = "cartoon";
-	shaderArr.push_back(cartoon);
+	// ShaderProgram phong;
+	// phong.vertexSource = base_vertex_src;
+	// phong.fragmentSource = loadShaderFromFile("./shaders/phong/4-phong_frag.glsl");
+	// phong.programID = compileShaderProgram(phong.vertexSource, phong.fragmentSource);
+	// phong.name = "phong";
+	// shaderArr.push_back(phong);
+
+	// ShaderProgram cartoon;
+	// cartoon.vertexSource = base_vertex_src;
+	// cartoon.fragmentSource = loadShaderFromFile("./shaders/phong/5-cartoon_frag.glsl");
+	// cartoon.programID = compileShaderProgram(cartoon.vertexSource, cartoon.fragmentSource);
+	// cartoon.name = "cartoon";
+	// shaderArr.push_back(cartoon);
 
 	// ShaderProgram flat; // TODO: Fix the loading of flat shader
 	// flat.vertexSource = base_vertex_src;

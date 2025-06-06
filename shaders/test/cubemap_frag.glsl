@@ -46,5 +46,5 @@ void main() {
     // vec3 baseSpecular = texture(material.specularMap, fragTexCoord).rgb;
     // vec3 baseEmissive = texture(material.emissiveMap, fragTexCoord).rgb;
 
-    fColor = vec4(baseDiffuse*0.1, 1.0);
+    fColor = vec4(baseDiffuse*0.3, 1.0);
 }

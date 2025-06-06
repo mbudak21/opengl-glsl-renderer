@@ -20,7 +20,6 @@ set(SOURCES
     src/material.cpp
     # src/mesh.cpp
     src/obj.c
-    src/sceneLoader.cpp
     src/sceneObj.cpp
     src/shaders.cpp
     src/locCache.cpp

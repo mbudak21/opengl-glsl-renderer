@@ -1,8 +1,18 @@
 #include "sceneObj.h"
+#include <chrono>
+
 
 std::unordered_map<std::string, std::shared_ptr<obj>> SceneObject::objectMap;
+float SceneObject::seed;
+
+
+// float seed = std::chrono::duration<float>(std::chrono::high_resolution_clock::now()).count();
+
+
+
 
 SceneObject::SceneObject(const char* path){
+
 	if(objectMap.find(path) != objectMap.end()){
 		// printf("Loading the object from cache...");
 		this->objInstance = objectMap[path].get();
@@ -42,14 +52,15 @@ void SceneObject::setShader(GLuint shaderId){
 	GLuint shinePos = locCache::getUniformLoc(this->shprg, "material.shininess");
 	GLuint normPos = locCache::getUniformLoc(this->shprg, "material.normalMap");
 
-	printf("=== Set Shader Upload ===\n");
-	printf("Locations:\n");
-	printf("  diffuseMap:	%d\n", diffPos);
-	printf("  ambientMap:	%d\n", ambPos);
-	printf("  emissiveMap:	%d\n", emissivePos);
-	printf("  specularMap:	%d\n", specPos);
-	printf("  shininess:	%d\n", shinePos);
-	printf("  normal:	%d\n", normPos);
+	// printf("=== Set Shader Upload ===\n");
+	// printf("Locations:\n");
+	// printf("  diffuseMap:	%d\n", diffPos);
+	// printf("  ambientMap:	%d\n", ambPos);
+	// printf("  emissiveMap:	%d\n", emissivePos);
+	// printf("  specularMap:	%d\n", specPos);
+	// printf("  shininess:	%d\n", shinePos);
+	// printf("  normal:	%d\n", normPos);
+	// printf("  globalPos:	[%f, %f, %f]\n", this->pos.x, this->pos.y, this->pos.z);
 
 	obj_set_prop_loc(o, OBJ_KD, -1, diffPos, -1);
 	obj_set_prop_loc(o, OBJ_KA, -1, ambPos, -1);
@@ -57,6 +68,18 @@ void SceneObject::setShader(GLuint shaderId){
 	obj_set_prop_loc(o, OBJ_KS, -1, specPos, -1);
 	obj_set_prop_loc(o, OBJ_NS, -1, shinePos, -1);
 	obj_set_prop_loc(o, OBJ_KN, -1, normPos, -1);
+
+
+	// printf("%F\n", this->pos.x);
+
+	// printf("%1.f, %1.f, %1.f\n", this->pos.x, this->pos.y, this->pos.z);
+	// setFloat1f(shaderId, "globalX", 0.6f);
+	// setFloat1f(shaderId, "globalZ", 0.6f);
+
+
+	// GLint loc = locCache::getUniformLoc(this->shprg, "vGlobalPos");
+	// obj_set_vert_loc(o, -1, -1, -1, 4);
+
 	this->prepareObject();
 };
 
@@ -64,11 +87,8 @@ void SceneObject::prepareObject(){
 	// printf("Preparing objects for shading...\n");
     obj* o = this->objInstance;
 	obj_proc(o);
-	int vTangentLoc = 3;
-	int vNormLoc = 1;
-	int vTexCoordLoc = 2;
-	int vPosLoc = 0;
 	obj_set_vert_loc(o, vTangentLoc, vNormLoc, vTexCoordLoc, vPosLoc);
+
 	// locCache::getUniformLoc();
 	// printf("OBJ Diagnostics:\n");
 	// printf("  Materials:       %d\n", obj_num_mtrl(o));
@@ -100,6 +120,11 @@ void SceneObject::renderObject(glm::mat4 P, glm::mat4 V) {
 	// setMatrix4fv(shaderId, "V", V);
 	setMatrix4fv(this->getShader(), "M", M);
 	setMatrix4fv(this->getShader(), "PVM", P*V*M);
+	setFloat1f(ShaderManager::getPerlinShader(), "globalX", this->orgPos.x);
+	setFloat1f(ShaderManager::getPerlinShader(), "globalY", this->orgPos.y);
+	setFloat1f(ShaderManager::getPerlinShader(), "globalZ", this->orgPos.z);
+	// printf("seed: %f\n", seed);
+	setFloat1f(ShaderManager::getPerlinShader(), "rand", seed);
 
 	obj_render(this->objInstance);
 	// printf("vao = %u, vbo = %u, vloc = %d\n", o->vao, o->vbo, o->vloc);

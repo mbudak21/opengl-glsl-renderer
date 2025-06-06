@@ -21,7 +21,7 @@ struct Light {
     float linear;
     float quadratic;
 };
-#define MAX_LIGHTS 32
+#define MAX_LIGHTS 128
 
 uniform Light lights[MAX_LIGHTS];
 uniform int numLights;

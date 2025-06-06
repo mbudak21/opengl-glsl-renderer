@@ -50,7 +50,7 @@ void Light::sendLightsToShader(GLuint programID) {
     
     const auto& lights = Light::getAllLights();
     int numLights = static_cast<int>(lights.size());
-    printf("Sending %i lights to shader ID: %i\n", numLights, programID);
+    // printf("Sending %i lights to shader ID: %i\n", numLights, programID);
     // Send number of lights
     GLint loc = glGetUniformLocation(programID, "numLights");
     glUniform1i(loc, numLights);

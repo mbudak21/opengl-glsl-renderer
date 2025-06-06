@@ -13,15 +13,23 @@
 #include "locCache.h"
 
 
+
+
 class SceneObject{
 private:
 	static std::unordered_map<std::string, std::shared_ptr<obj>> objectMap;
 	GLuint shprg = 0;
+	int vTangentLoc = 3;
+	int vNormLoc = 1;
+	int vTexCoordLoc = 2;
+	int vPosLoc = 0;
 public:
+	static float seed;
     obj* objInstance;
 	bool fixShader = false;
 	
 	glm::vec3 pos = {0.f, 0.f, 0.f};
+	glm::vec3 orgPos;
 	glm::vec3 rot = {0.f, 0.f, 0.f};
 	glm::vec3 scale = {1.f, 1.f, 1.f};
 

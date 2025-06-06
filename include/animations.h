@@ -16,12 +16,14 @@ namespace Anim {
         SceneObject* target;
         glm::vec3 startPos;
         glm::vec3 endPos;
+        glm::vec3 init_pos;
         glm::vec3 speedPerFrame;
     };
     struct LightTrans {
         Light* target;
         glm::vec3 startPos;
         glm::vec3 endPos;
+        glm::vec3 init_pos;
         glm::vec3 speedPerFrame;
     };
     struct Scale {
@@ -41,10 +43,10 @@ namespace Anim {
         rotations.push_back({m, spd, resetframe});
     }
     inline void addTranslate(SceneObject* m, const glm::vec3 &spd, const glm::vec3 &start, const glm::vec3 &end) {
-        translations.push_back({ m, start, end, spd });
+        translations.push_back({ m, start, end, m->pos, spd });
     }
     inline void addTranslate(Light* l, const glm::vec3 &spd, const glm::vec3 &start, const glm::vec3 &end) {
-        lightTranslations.push_back({ l, start, end, spd });
+        lightTranslations.push_back({ l, start, end, l->pos, spd });
     }
     inline void addScale(SceneObject* m, const glm::vec3 &spd, int resetframe = INT_MAX) {
         scalings.push_back({m, m->scale, spd, resetframe});
@@ -57,7 +59,8 @@ namespace Anim {
         }
         // translations
         for (auto &t : translations) {
-            t.target->pos += t.speedPerFrame;
+            // t.target->pos += t.speedPerFrame;
+            t.target->pos = t.init_pos + t.speedPerFrame * static_cast<float>(frameCount);
             for (int i = 0; i < 3; i++) {
                 if ((t.startPos[i] < t.endPos[i]) ) { // Moving in +Axis
                     if ((t.target->pos[i] >= t.endPos[i])) {
@@ -68,7 +71,7 @@ namespace Anim {
         }
         // Light translations
         for (auto &t : lightTranslations) {
-            t.target->setPosition(t.speedPerFrame + t.target->pos);
+            t.target->pos = t.init_pos + t.speedPerFrame * static_cast<float>(frameCount);
             for (int i = 0; i < 3; i++) {
                 if ((t.startPos[i] < t.endPos[i]) ) { // Moving in +Axis
                     if ((t.target->pos[i] >= t.endPos[i])) {

@@ -21,7 +21,10 @@ private:
 	static std::string loadShaderFromFile(const std::string& filename);
 	static void printShaderErrorInfo(GLuint shaderProgram);
 	static int currentShaderIndex;
+	
 public:
+	static bool perlinShaderUsed;
+
 	static std::vector<ShaderProgram> shaderArr;
 
 	static GLuint compileShaderProgram(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& geometrySrc = "");
@@ -35,6 +38,10 @@ public:
 	// TODO: Use enums
 	static GLuint getCubemapShader(){
 		return shaderArr[2].programID;
+	}
+	static GLuint getPerlinShader(){
+		perlinShaderUsed = true;
+		return shaderArr[3].programID;
 	}
 };
 
